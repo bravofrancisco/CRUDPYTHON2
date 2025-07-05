@@ -1,0 +1,7 @@
+# Ignorar archivo de entorno
+.env
+
+# Carpetas comunes a ignorar
+__pycache__/
+*.pyc
+.vscode/

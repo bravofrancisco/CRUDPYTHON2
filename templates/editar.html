@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Paciente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl w-full bg-white p-8 rounded-lg shadow-xl">
+        <h1 class="text-3xl font-bold text-center text-indigo-700 mb-8">Editar Paciente</h1>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mb-6">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="post" class="space-y-6">
+            {{ formulario.csrf_token }}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nombre -->
+                <div>
+                    {{ formulario.nombre.label(class="block text-sm font-medium text-gray-700 mb-1") }}
+                    {{ formulario.nombre(class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder="Nombre del paciente") }}
+                    {% for error in formulario.nombre.errors %}
+                        <div class="text-danger mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Apellido -->
+                <div>
+                    {{ formulario.apellido.label(class="block text-sm font-medium text-gray-700 mb-1") }}
+                    {{ formulario.apellido(class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder="Apellido del paciente") }}
+                    {% for error in formulario.apellido.errors %}
+                        <div class="text-danger mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Fecha de Nacimiento -->
+            <div>
+                {{ formulario.fecha_nacimiento.label(class="block text-sm font-medium text-gray-700 mb-1") }}
+                {{ formulario.fecha_nacimiento(class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", type="date") }}
+                {% for error in formulario.fecha_nacimiento.errors %}
+                    <div class="text-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Género -->
+            <div>
+                {{ formulario.genero.label(class="block text-sm font-medium text-gray-700 mb-1") }}
+                {{ formulario.genero(class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm") }}
+                {% for error in formulario.genero.errors %}
+                    <div class="text-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <!-- Dirección -->
+            <div>
+                {{ formulario.direccion.label(class="block text-sm font-medium text-gray-700 mb-1") }}
+                {{ formulario.direccion(class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder="Dirección completa") }}
+                {% for error in formulario.direccion.errors %}
+                    <div class="text-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Teléfono -->
+                <div>
+                    {{ formulario.telefono.label(class="block text-sm font-medium text-gray-700 mb-1") }}
+                    {{ formulario.telefono(class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder="Número de teléfono") }}
+                    {% for error in formulario.telefono.errors %}
+                        <div class="text-danger mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Email -->
+                <div>
+                    {{ formulario.email.label(class="block text-sm font-medium text-gray-700 mb-1") }}
+                    {{ formulario.email(class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder="Correo electrónico") }}
+                    {% for error in formulario.email.errors %}
+                        <div class="text-danger mt-1">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Número de Documento -->
+            <div>
+                {{ formulario.numero_documento.label(class="block text-sm font-medium text-gray-700 mb-1") }}
+                {{ formulario.numero_documento(class="form-control mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", placeholder="Número de identificación") }}
+                {% for error in formulario.numero_documento.errors %}
+                    <div class="text-danger mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="flex justify-end space-x-4 mt-8">
+                <button type="submit" class="btn btn-success px-6 py-3 text-lg">Guardar cambios</button>
+                <a href="{{ url_for('index') }}" class="btn btn-link px-6 py-3 text-lg">Volver a inicio</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

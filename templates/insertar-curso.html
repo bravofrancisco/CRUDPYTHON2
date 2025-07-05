@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insertar Paciente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-primary mb-4">Insertar un paciente</h1>
+        
+        <form method="post">
+            {{ formulario.csrf_token }}
+            
+            <div class="mb-3">
+                {{ formulario.nombre.label(class="form-label") }}
+                {{ formulario.nombre(class="form-control", size=50) }}
+                {% for error in formulario.nombre.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ formulario.apellido.label(class="form-label") }}
+                {{ formulario.apellido(class="form-control", size=50) }}
+                {% for error in formulario.apellido.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ formulario.fecha_nacimiento.label(class="form-label") }}
+                {{ formulario.fecha_nacimiento(class="form-control", size=50) }}
+                {% for error in formulario.fecha_nacimiento.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                {{ formulario.genero.label(class="form-label") }}
+                {{ formulario.genero(class="form-control") }}
+                {% for error in formulario.genero.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ formulario.direccion.label(class="form-label") }}
+                {{ formulario.direccion(class="form-control", size=50) }}
+                {% for error in formulario.direccion.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ formulario.telefono.label(class="form-label") }}
+                {{ formulario.telefono(class="form-control", size=50) }}
+                {% for error in formulario.telefono.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ formulario.email.label(class="form-label") }}
+                {{ formulario.email(class="form-control", size=50) }}
+                {% for error in formulario.email.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ formulario.numero_documento.label(class="form-label") }}
+                {{ formulario.numero_documento(class="form-control", size=50) }}
+                {% for error in formulario.numero_documento.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+                {{ formulario.enviar(class="btn btn-primary") }}
+                <a href="{{ url_for('index') }}" class="btn btn-link">Volver a inicio</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
