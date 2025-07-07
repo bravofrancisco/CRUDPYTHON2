@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"],
+        input[type="password"] {
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            padding: 0.5rem;
+            background: #007BFF;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        /* Estilos para mensajes flash */
+        .flash-messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .flash-danger {
+            background-color: #f8d7da; /* Rojo claro */
+            color: #721c24; /* Rojo oscuro */
+            border: 1px solid #f5c6cb;
+        }
+        .flash-info {
+            background-color: #d1ecf1; /* Azul claro */
+            color: #0c5460; /* Azul oscuro */
+            border: 1px solid #bee5eb;
+        }
+        .flash-success {
+            background-color: #d4edda; /* Verde claro */
+            color: #155724; /* Verde oscuro */
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>🔐 Iniciar sesión</h2>
+        
+        {# Bloque para mostrar mensajes flash #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flash-messages">
+                    {% for category, message in messages %}
+                        <li class="flash-message flash-{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}" autocomplete="off">
+            <label for="username">Usuario</label>
+            <input id="username" type="text" name="username" placeholder="Usuario" required autofocus />
+
+            <label for="password">Contraseña</label>
+            <input id="password" type="password" name="password" placeholder="Contraseña" required />
+            
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
+                // Temporizador para ocultar el mensaje después de 2 segundos
+                setTimeout(() => {
+                    message.style.transition = 'opacity 0.5s ease-out';
+                    message.style.opacity = '0';
+                    setTimeout(() => message.remove(), 500); // Eliminar después de la transición
+                }, 2000); // 2000 milisegundos = 2 segundos
+
+                // Funcionalidad para el botón de cerrar
+                const closeBtn = message.querySelector('.flash-close-btn');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        message.style.transition = 'opacity 0.5s ease-out';
+                        message.style.opacity = '0';
+                        setTimeout(() => message.remove(), 500);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

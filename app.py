@@ -1,4 +1,5 @@
-from flask import Flask, flash, redirect, render_template, request, url_for
+from functools import wraps
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 import os
 from database import db
 from flask_migrate import Migrate
@@ -24,11 +25,62 @@ db.init_app(app)
 
 migrate = Migrate(app,db)
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            flash('debes iniciar sesion para acceder a esta pagina' ,'info')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
+@app.route("/")
+def inicio():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    return redirect(url_for('index'))
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if session.get('logged_in'):
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+    # Validación simple para el usuario 'admin'.
+        # En un sistema real, aquí buscarías el usuario en la base de datos
+        # y verificarías la contraseña de forma segura (e.g., con hashes).
+        if username == 'admin':
+            if password == 'secret':
+                session['logged_in'] = True
+                # Puedes usar flash para un mensaje de éxito también
+                flash('Has iniciado sesión exitosamente como administrador.', 'success')
+                return redirect(url_for('inicio')) # Redirige a la página principal de cursos
+            else:
+                # Mensaje si la contraseña es incorrecta para 'admin'
+                flash('Contraseña incorrecta para el usuario admin.', 'danger')
+        else:
+            # Mensaje si el usuario no es 'admin' o no coincide con 'admin'
+            flash('Usuario o contraseña inválidos. Asegúrate de usar "admin" y "secret".', 'danger')
+
+        # Vuelve a renderizar el login con el mensaje de error flasheado
+        return render_template('login.html') 
+
+    return render_template('login.html')   
+
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in',None)
+    flash('Has cerrado session exitosamente','success')
+    return redirect(url_for('login'))
 
 @app.route("/inicio")
+@login_required
 def index():
-    pacientes = Paciente.query.order_by(Paciente.id)
+    pacientes = Paciente.query.order_by(Paciente.id).all()
     total_pacientes = Paciente.query.count()
     return render_template('index.html',Total_Pacientes=pacientes, CantidadPacientes=total_pacientes) 
 
@@ -38,6 +90,7 @@ def ver_paciente(id):
     return render_template('curso.html', datos=paciente)
 
 @app.route('/registrar', methods=['GET','POST'])
+@login_required
 def registrar():
     registrarPaciente = Paciente()
     registrarFormulario = RegistrarForm(obj=registrarPaciente)
@@ -45,11 +98,12 @@ def registrar():
         registrarFormulario.populate_obj(registrarPaciente)
         db.session.add(registrarPaciente)
         db.session.commit()
-        flash('Curso insertado correcto', 'sucess')
+        flash('Paciente insertado correcto', 'success')
         return redirect(url_for('index'))
     return render_template('insertar-curso.html',formulario=registrarFormulario)
 
 @app.route('/editar/<int:id>', methods=['GET','POST'])
+@login_required
 def editar(id):
     registrarPaciente = Paciente.query.get_or_404(id)
     registrarForm = RegistrarForm(obj=registrarPaciente)
@@ -79,18 +133,13 @@ def editar(id):
 
  
 @app.route('/eliminar/<int:id>')
+@login_required
 def eliminar(id):
     paciente = Paciente.query.get_or_404(id)
     db.session.delete(paciente)
     db.session.commit()
     flash('Curso eliminado correctamente.', 'success')
     return redirect(url_for('index'))
-
-# @app.route('/editar/<int:id>')
-# def editar(id):
-#     pacientes = Paciente.query.get_or_404(id)
-#     pacienteForm = 
-
 
 if __name__ == '__main__':
     app.run(debug=True)

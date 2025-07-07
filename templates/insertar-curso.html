@@ -15,7 +15,7 @@
             
             <div class="mb-3">
                 {{ formulario.nombre.label(class="form-label") }}
-                {{ formulario.nombre(class="form-control", size=50) }}
+                {{ formulario.nombre(class="form-control", maxlength="50") }}
                 {% for error in formulario.nombre.errors %}
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
@@ -23,7 +23,7 @@
             
             <div class="mb-3">
                 {{ formulario.apellido.label(class="form-label") }}
-                {{ formulario.apellido(class="form-control", size=50) }}
+                {{ formulario.apellido(class="form-control", maxlength="50") }}
                 {% for error in formulario.apellido.errors %}
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
@@ -31,7 +31,7 @@
             
             <div class="mb-3">
                 {{ formulario.fecha_nacimiento.label(class="form-label") }}
-                {{ formulario.fecha_nacimiento(class="form-control", size=50) }}
+                {{ formulario.fecha_nacimiento(class="form-control", type="date") }}
                 {% for error in formulario.fecha_nacimiento.errors %}
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
@@ -47,7 +47,7 @@
             
             <div class="mb-3">
                 {{ formulario.direccion.label(class="form-label") }}
-                {{ formulario.direccion(class="form-control", size=50) }}
+                {{ formulario.direccion(class="form-control", maxlength="50") }}
                 {% for error in formulario.direccion.errors %}
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
@@ -55,7 +55,7 @@
             
             <div class="mb-3">
                 {{ formulario.telefono.label(class="form-label") }}
-                {{ formulario.telefono(class="form-control", size=50) }}
+                {{ formulario.telefono(class="form-control", maxlength="50") }}
                 {% for error in formulario.telefono.errors %}
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
@@ -63,7 +63,7 @@
             
             <div class="mb-3">
                 {{ formulario.email.label(class="form-label") }}
-                {{ formulario.email(class="form-control", size=50) }}
+                {{ formulario.email(class="form-control", maxlength="50") }}
                 {% for error in formulario.email.errors %}
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
@@ -71,7 +71,7 @@
             
             <div class="mb-3">
                 {{ formulario.numero_documento.label(class="form-label") }}
-                {{ formulario.numero_documento(class="form-control", size=50) }}
+                {{ formulario.numero_documento(class="form-control", maxlength="50") }}
                 {% for error in formulario.numero_documento.errors %}
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
