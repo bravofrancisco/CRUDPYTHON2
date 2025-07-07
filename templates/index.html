@@ -31,21 +31,23 @@
     <div class="insertar">
         <a href="{{url_for('registrar')}}" class="btn btn-primary">Insertar nuevo paciente</a>
     </div>
+
     <div class="container mb-5">
-          {# Área para mostrar mensajes flash #}
+        {# Área para mostrar mensajes flash #}
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class="list-unstyled">
-                    {% for category, message in messages %}
-                        <li class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+        {% if messages %}
+        <ul class="list-unstyled">
+            {% for category, message in messages %}
+            <li class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% endwith %}
         <p>Total contado: {{ CantidadPacientes }}</p>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -85,9 +87,9 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <a href="{{url_for('ver_citas')}}" class="btn btn-info">Ver Citas Detalladas</a>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

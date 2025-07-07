@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Lista de Citas - 2025</title>
+</head>
+
+<body>
+    {# Barra de navegación con botón de Cerrar Sesión #}
+    {%if session.get('logged_in')%}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a href="{{url_for('index')}}" class="navbar-brand">
+                Mis Citas
+            </a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="{{url_for('logout')}}" class="nav-link btn btn-danger text-white">Cerrar sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {%endif%}
+
+    <div class="container mb-5 mt-3">
+        {# Área para mostrar mensajes flash #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="list-unstyled">
+            {% for category, message in messages %}
+            <li class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <h2 class="mt-5">Lista Detallada de Citas (Total: {{ TotalCitas }})</h2>
+        <a href="{{url_for('index')}}" class="btn btn-secondary mb-3">Volver a la página principal</a>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID Cita</th>
+                    <th>Fecha y Hora</th>
+                    <th>Motivo</th>
+                    <th>Paciente</th>
+                    <th>Doctor</th>
+                    <th>Especialidad Doctor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in VerCitas %}
+                <tr>
+                    <td>{{ cita.id }}</td>
+                    <td>{{ cita.fecha_hora }}</td>
+                    <td>{{ cita.motivo }}</td>
+                    <td>{{ cita.paciente_nombre }} {{ cita.paciente_apellido }}</td>
+                    <td>{{ cita.doctor_nombre }}</td>
+                    <td>{{ cita.especialidad }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

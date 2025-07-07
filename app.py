@@ -5,7 +5,7 @@ from database import db
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from forms import RegistrarForm
-from models import Paciente
+from models import Cita, Doctor, Paciente
 load_dotenv()
 
 app = Flask(__name__)
@@ -84,6 +84,8 @@ def index():
     total_pacientes = Paciente.query.count()
     return render_template('index.html',Total_Pacientes=pacientes, CantidadPacientes=total_pacientes) 
 
+
+
 @app.route("/pacientes/<int:id>")
 def ver_paciente(id):
     paciente = Paciente.query.get_or_404(id)
@@ -140,6 +142,41 @@ def eliminar(id):
     db.session.commit()
     flash('Curso eliminado correctamente.', 'success')
     return redirect(url_for('index'))
+
+
+@app.route("/ver_citas")
+@login_required # Protege esta ruta también
+def ver_citas():
+    citas_completas = [] # Inicializa como lista vacía
+    total_citas = 0
+
+    try:
+        # Consulta para obtener las citas con la información de paciente y doctor
+        citas_completas = db.session.query(
+            Cita.id,
+            Cita.fecha_hora,
+            Cita.motivo,
+            Paciente.nombre.label('paciente_nombre'),
+            Paciente.apellido.label('paciente_apellido'),
+            Doctor.nombre.label('doctor_nombre'),
+            Doctor.especialidad
+        ).join(Paciente, Cita.paciente_id == Paciente.id)\
+         .join(Doctor, Cita.doctor_id == Doctor.id)\
+         .order_by(Cita.fecha_hora)\
+         .all()
+        
+        total_citas = len(citas_completas)
+        # print(f"DEBUG: Citas obtenidas para /ver_citas: {total_citas} registros.")
+        # print("DEBUG: Primeros 5 registros de citas (/ver_citas):", citas_completas[:5]) # Muestra los primeros 5
+
+    except Exception as e:
+        flash(f"Error al cargar las citas: {e}", 'danger')
+        print(f"ERROR: Fallo al cargar citas en /ver_citas: {e}")
+        # En caso de error, citas_completas ya está inicializada como []
+
+    # Renderiza una plantilla específica para las citas detalladas
+    return render_template('ver_citas.html', VerCitas=citas_completas, TotalCitas=total_citas)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

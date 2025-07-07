@@ -1,8 +1,10 @@
 import enum
 from sqlalchemy import  String, Enum
-from datetime import date
+from datetime import date, datetime
 from database import db
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy import ForeignKey, DateTime
 
 class GeneroEnum(enum.Enum):
     masculino = "masculino"
@@ -22,7 +24,7 @@ class Paciente(db.Model):
     telefono: Mapped[str] = mapped_column(String(20), nullable=True)
     email: Mapped[str] = mapped_column(String(255), nullable=True, unique=True)
     numero_documento: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
-
+    citas: Mapped[list["Cita"]]= relationship("Cita", back_populates="paciente")
 
     @property
     def genero_str(self) -> str:
@@ -43,3 +45,30 @@ class Paciente(db.Model):
     )
 
 
+class Doctor(db.Model):
+    __tablename__ = 'doctores'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    nombre: Mapped[str] = mapped_column(String(255), nullable=False)
+    especialidad: Mapped[str] = mapped_column(String(255), nullable=False)
+    email: Mapped[str] = mapped_column(String(255), nullable=True, unique=True)
+    telefono: Mapped[str] = mapped_column(String(20), nullable=True)
+
+    # Relación inversa con citas
+    citas: Mapped[list["Cita"]] = relationship("Cita", back_populates="doctor")
+
+
+class Cita(db.Model):
+    __tablename__ = 'citas'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    fecha_hora: Mapped[datetime] = mapped_column(nullable=False)
+    motivo: Mapped[str] = mapped_column(String(255), nullable=True)
+
+    # Foreign keys
+    paciente_id: Mapped[int] = mapped_column(ForeignKey('pacientes.id'), nullable=False)
+    doctor_id: Mapped[int] = mapped_column(ForeignKey('doctores.id'), nullable=False)
+
+    # Relaciones
+    paciente: Mapped["Paciente"] = relationship("Paciente", back_populates="citas")
+    doctor: Mapped["Doctor"] = relationship("Doctor", back_populates="citas")    
