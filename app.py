@@ -1,6 +1,8 @@
 from functools import wraps
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 import os
+
+from sqlalchemy import desc
 from database import db
 from flask_migrate import Migrate
 from dotenv import load_dotenv
@@ -80,7 +82,7 @@ def logout():
 @app.route("/inicio")
 @login_required
 def index():
-    pacientes = Paciente.query.order_by(Paciente.id).all()
+    pacientes = Paciente.query.order_by(desc(Paciente.id)).all()
     total_pacientes = Paciente.query.count()
     return render_template('index.html',Total_Pacientes=pacientes, CantidadPacientes=total_pacientes) 
 
